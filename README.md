@@ -9,7 +9,7 @@ This serverless app posts messages to Slack.
 ## Installation Instructions
 
 1. [Create an AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) if you do not already have one and login
-1. Go to the app's page on the [Serverless Application Repository]() and click "Deploy"
+1. Go to the app's page on the [Serverless Application Repository](https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:289559741701:applications~lambda-to-slack) and click "Deploy"
 1. Provide the required app parameters (see parameter details below) and click "Deploy"
 
 ## Using this Application
