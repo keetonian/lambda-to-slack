@@ -1,0 +1,54 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Metadata:
+  AWS::ServerlessRepo::Application:
+    Name: lambda-to-slack
+    Description: Posts messages to a Slack channel.
+    Author: Keeton Hodgson
+    SpdxLicenseId: MIT
+    # paths are relative to .aws-sam/build directory
+    LicenseUrl: ../../LICENSE
+    ReadmeUrl: ../../README.md
+    Labels: [serverless,slack,lambda]
+    HomePageUrl: https://github.com/keetonian/lambda-to-slack
+    # Update the semantic version and run sam publish to publish a new version of your app
+    SemanticVersion: 0.0.1
+    # best practice is to use git tags for each release and link to the version tag as your source code URL
+    SourceCodeUrl: https://github.com/keetonian/lambda-to-slack/tree/0.0.1
+
+Parameters:
+  LogLevel:
+    Type: String
+    Description: Log level for Lambda function logging, e.g., ERROR, INFO, DEBUG, etc
+    Default: INFO
+  SlackUrl:
+    Description: Webhook URL for integration with Slack
+    Type: String
+
+Globals:
+  Function:
+    Runtime: python3.7
+    Tracing: Active
+    Timeout: 60
+    Environment:
+      Variables:
+        LOG_LEVEL: !Ref LogLevel
+
+Resources:
+  LambdaToSlack:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: handlers.post_to_slack
+      Environment:
+        Variables:
+          SLACK_URL: !Ref SlackUrl
+
+Outputs:
+  LambdaToSlackName:
+    Description: "Lambda Function Name"
+    Value: !Ref LambdaToSlack
+  LambdaToSlackArn:
+    Description: "Lambda Function ARN"
+    Value: !GetAtt LambdaToSlack.Arn
