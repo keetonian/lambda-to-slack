@@ -9,7 +9,7 @@ SAM_DIR := .aws-sam
 # Required environment variables (user must override)
 
 # S3 bucket used for packaging SAM templates
-PACKAGE_BUCKET ?= your-bucket-here
+PACKAGE_BUCKET ?= tsb-odds-dev
 
 # user can optionally override the following by setting environment variables with the same names before running make
 
@@ -44,16 +44,17 @@ test:
 	pipenv run flake8 $(SRC_DIR)
 	pipenv run pydocstyle $(SRC_DIR)
 	pipenv run cfn-lint template.yml
-	pipenv run py.test --cov=$(SRC_DIR) --cov-fail-under=90 -vv test/unit
+	LAMBDA_TASK_ROOT=`pwd` pipenv run py.test --cov=$(SRC_DIR) --cov-fail-under=90 -vv test/unit
 
 compile: test
-	pipenv lock --requirements > $(SRC_DIR)/requirements.txt
+	pip install pip-tools
+	pip-compile src/requirements.in > src/requirements.txt
 	pipenv run sam build
 
 build: compile
 
 package: compile
-	pipenv run sam package --s3-bucket $(PACKAGE_BUCKET) --output-template-file $(SAM_DIR)/packaged-template.yml
+	pipenv run sam package --s3-bucket $(PACKAGE_BUCKET) --output-template-file $(SAM_DIR)/packaged-template.yml --s3-prefix lambdaToSlack
 
 deploy: package
 	pipenv run sam deploy --template-file $(SAM_DIR)/packaged-template.yml --stack-name $(STACK_NAME) --capabilities CAPABILITY_IAM --parameter-overrides SlackUrl=${SLACK_URL}

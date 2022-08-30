@@ -8,8 +8,8 @@ Metadata:
     Author: Keeton Hodgson
     SpdxLicenseId: MIT
     # paths are relative to .aws-sam/build directory
-    LicenseUrl: ../../LICENSE
-    ReadmeUrl: ../../README.md
+    LicenseUrl: ./LICENSE
+    ReadmeUrl: ./README.md
     Labels: [serverless,slack,lambda]
     HomePageUrl: https://github.com/keetonian/lambda-to-slack
     # Update the semantic version and run sam publish to publish a new version of your app
